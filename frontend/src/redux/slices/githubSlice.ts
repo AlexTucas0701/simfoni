@@ -22,7 +22,7 @@ const initialState: GitHubSearchState = {
   results: [],
   loading: false,
   error: null,
-}
+};
 
 export const fetchGitHubResults = createAsyncThunk(
   'githubSearch/fetchResults',
@@ -34,7 +34,7 @@ export const fetchGitHubResults = createAsyncThunk(
         keyword: keyword,
       },
     );
-    return response.data.items; // GitHub API returns items in the response
+    return response.data;
   },
 );
 

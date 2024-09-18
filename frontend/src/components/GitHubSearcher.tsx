@@ -7,7 +7,7 @@ import {
   GitHubSearchParams,
   fetchGitHubResults,
   setSearchParams as setSearchParamsRedux,
-} from '../features/github/githubSlice';
+} from '../redux/slices/githubSlice';
 
 import '../css/GitHubSearcher.css';
 

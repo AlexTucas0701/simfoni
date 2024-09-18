@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import githubReducer from './features/github/githubSlice';
+import githubReducer from './slices/githubSlice';
 
 
 export const store = configureStore({

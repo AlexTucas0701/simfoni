@@ -32,7 +32,14 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = []
+INSTALLED_APPS = [
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    # 3rd Party App
+    "rest_framework",
+    # Custom App
+    "github",
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -69,7 +76,7 @@ WSGI_APPLICATION = "molyneux_backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": ":memory:",
     }
 }
 
