@@ -1,21 +1,19 @@
-import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 // import type { RootState } from '../../store';
 import { SearchType } from '../../types/search';
+import api from '../../utils/api';
 
-interface GitHubSearchState {
+export interface GitHubSearchParams {
   type: SearchType;
   keyword: string;
+}
+
+interface GitHubSearchState extends GitHubSearchParams {
   results: any[];
   loading: boolean;
   error: string | null;
-}
-
-interface GitHubSearchParams {
-  type: SearchType;
-  keyword: string;
 }
 
 const initialState: GitHubSearchState = {
@@ -29,8 +27,12 @@ const initialState: GitHubSearchState = {
 export const fetchGitHubResults = createAsyncThunk(
   'githubSearch/fetchResults',
   async ({ type, keyword }: GitHubSearchParams) => {
-    const response = await axios.get(
-      `https://api.github.com/search/${type}?q=${keyword}`
+    const response = await api.post(
+      "/search",
+      {
+        type: type,
+        keyword: keyword,
+      },
     );
     return response.data.items; // GitHub API returns items in the response
   },

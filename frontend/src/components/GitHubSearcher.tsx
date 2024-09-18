@@ -3,7 +3,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { SearchType, getSearchType } from '../types/search';
 import { useAppDispatch } from '../hooks/index';
-import { setSearchParams as setSearchParamsRedux } from '../features/github/githubSlice';
+import {
+  GitHubSearchParams,
+  fetchGitHubResults,
+  setSearchParams as setSearchParamsRedux,
+} from '../features/github/githubSlice';
 
 import '../css/GitHubSearcher.css';
 
@@ -33,10 +37,19 @@ const GitHubSearcher: React.FC = () => {
     const keyword = searchParams.get("keyword") ?? "";
 
     navigate(`/?${query_string}`, { replace: true });
-    dispatch(setSearchParamsRedux({
-      type,
-      keyword,
-    }));
+
+    const debounce_timeout_id = setTimeout(() => {
+      const payload: GitHubSearchParams = {
+        type,
+        keyword,
+      };
+      dispatch(setSearchParamsRedux(payload));
+      dispatch(fetchGitHubResults(payload));
+    }, 500);
+
+    return () => {
+      clearTimeout(debounce_timeout_id);
+    }
   }, [searchParams, navigate, dispatch]);
 
   const handleSearchKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
