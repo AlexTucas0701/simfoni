@@ -22,12 +22,12 @@ const GitHubSearcher: React.FC = () => {
     setSearchParams({
       keyword: searchKeyword,
     });
-  }, [searchKeyword]);
+  }, [searchKeyword, setSearchParams]);
 
   useEffect(() => {
     const query_string = searchParams.toString();
     navigate(`/${searchType}?${query_string}`, { replace: true });
-  }, [searchParams, searchType]);
+  }, [searchParams, searchType, navigate]);
 
   const handleSearchKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
