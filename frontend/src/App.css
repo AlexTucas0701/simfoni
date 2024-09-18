@@ -1,38 +1,45 @@
-.App {
-  text-align: center;
+/* Basic styling for the container */
+.container {
+  min-height: calc(100vh - 30px);
+  margin: 0 auto; /* Center the container */
+  padding: 15px;  /* Add some padding */
+  background-color: #ffffff;
+  border: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Breakpoints for different screen sizes */
+@media (max-width: 576px) {
+  .container {
+    max-width: 100%; /* For screens smaller than 576px */
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (min-width: 576px) and (max-width: 767px) {
+  .container {
+    max-width: 540px; /* For small screens (>= 576px) */
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container {
+    max-width: 720px; /* For medium screens (>= 768px) */
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .container {
+    max-width: 960px; /* For large screens (>= 992px) */
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .container {
+    max-width: 1140px; /* For extra large screens (>= 1200px) */
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px; /* For XXL screens (>= 1400px) */
   }
 }
