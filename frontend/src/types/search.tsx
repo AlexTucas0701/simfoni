@@ -12,5 +12,5 @@ const searchTypeMap: { [key: string]: SearchType } = {
 
 export const getSearchType = (type_value: string) => {
   type_value = type_value.toLowerCase();
-  return searchTypeMap[type_value];
+  return searchTypeMap[type_value] ?? SearchType.USER;
 }

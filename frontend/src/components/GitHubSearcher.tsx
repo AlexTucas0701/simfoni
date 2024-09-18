@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { SearchType, getSearchType } from '../types/search';
+import { useAppDispatch } from '../hooks/index';
+import { setSearchParams as setSearchParamsRedux } from '../features/github/githubSlice';
 
 import '../css/GitHubSearcher.css';
 
 
 const GitHubSearcher: React.FC = () => {
-  const { type } = useParams();
   const [ searchParams, setSearchParams ] = useSearchParams();
 
-  const search_type = getSearchType(type ?? SearchType.USER) ?? SearchType.USER;
+  const search_type = getSearchType(searchParams.get("type") ?? SearchType.USER);
   const init_search_keyword: string = searchParams.get("keyword") ?? "";
 
   const [ searchKeyword, setSearchKeyword ] = useState<string>(init_search_keyword);
   const [ searchType, setSearchType ] = useState<SearchType>(search_type);
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setSearchParams({
       keyword: searchKeyword,
+      type: searchType,
     });
-  }, [searchKeyword, setSearchParams]);
+  }, [searchKeyword, searchType, setSearchParams]);
 
   useEffect(() => {
     const query_string = searchParams.toString();
-    navigate(`/${searchType}?${query_string}`, { replace: true });
-  }, [searchParams, searchType, navigate]);
+    const type = getSearchType(searchParams.get("type") ?? "");
+    const keyword = searchParams.get("keyword") ?? "";
+
+    navigate(`/?${query_string}`, { replace: true });
+    dispatch(setSearchParamsRedux({
+      type,
+      keyword,
+    }));
+  }, [searchParams, navigate, dispatch]);
 
   const handleSearchKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
