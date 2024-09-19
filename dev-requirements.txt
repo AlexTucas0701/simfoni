@@ -12,8 +12,12 @@ async-timeout==4.0.3
     # via redis
 black==24.8.0
     # via -r dev-requirements.in
+certifi==2024.8.30
+    # via requests
 cfgv==3.4.0
     # via pre-commit
+charset-normalizer==3.3.2
+    # via requests
 click==8.1.7
     # via black
 distlib==0.3.8
@@ -30,6 +34,8 @@ flake8==7.1.1
     # via -r dev-requirements.in
 identify==2.6.1
     # via pre-commit
+idna==3.10
+    # via requests
 mccabe==0.7.0
     # via flake8
 mypy-extensions==1.0.0
@@ -58,6 +64,8 @@ pyyaml==6.0.2
     # via pre-commit
 redis==5.0.8
     # via -r requirements.in
+requests==2.32.3
+    # via -r requirements.in
 sqlparse==0.5.1
     # via django
 tomli==2.0.1
@@ -68,5 +76,7 @@ typing-extensions==4.12.2
     #   black
     #   pydantic
     #   pydantic-core
+urllib3==2.2.3
+    # via requests
 virtualenv==20.26.4
     # via pre-commit

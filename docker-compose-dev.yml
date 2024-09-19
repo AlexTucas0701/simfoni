@@ -4,6 +4,8 @@ services:
       dockerfile: ./config/docker/Dockerfile.backend
       context: ./
     image: molyneux-backend:dev
+    env_file:
+      - .env
     volumes:
       - ./backend:/app
     ports:
