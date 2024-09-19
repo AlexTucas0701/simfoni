@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { useAppSelector } from '../hooks';
-import Spinner from './Spinner';
+import { useAppSelector } from '../../hooks';
+import Spinner from '../layout/Spinner';
 
-import '../css/SearchResult.css';
-import { SearchType } from '../types/search';
+import '../../css/SearchResult.css';
+import { SearchType } from '../../types/search';
 
 
 interface SearchingProps {

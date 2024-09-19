@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { SearchType, getSearchType } from '../types/search';
-import { useAppDispatch } from '../hooks/index';
+import { SearchType, getSearchType } from '../../types/search';
+import { useAppDispatch } from '../../hooks/index';
 import {
   GitHubSearchParams,
   fetchGitHubResults,
   setSearchParams as setSearchParamsRedux,
-} from '../redux/slices/githubSlice';
+} from '../../redux/slices/githubSlice';
 
-import '../css/GitHubSearcher.css';
+import '../../css/GitHubSearcher.css';
 
 
 const GitHubSearcher: React.FC = () => {

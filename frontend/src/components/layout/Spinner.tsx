@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/Spinner.css'; // You can add your spinner styles in this file
+import '../../css/Spinner.css'; // You can add your spinner styles in this file
 
 
 const Spinner: React.FC = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import GitHubSearcher from '../components/GitHubSearcher';
-import SearchResult from '../components/SearchResult';
+import GitHubSearcher from '../components/github/GitHubSearcher';
+import SearchResult from '../components/github/GitHubSearchResult';
 
 
 const Home: React.FC = () => {
