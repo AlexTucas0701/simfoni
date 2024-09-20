@@ -2,6 +2,12 @@ from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
 from polyfactory.factories.pydantic_factory import ModelFactory
+from rest_framework.test import APIClient, APITestCase
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_400_BAD_REQUEST,
+    HTTP_429_TOO_MANY_REQUESTS,
+)
 from requests.exceptions import HTTPError
 
 from config import Config
@@ -146,3 +152,91 @@ class GitHubSearchCacheServiceTestCase(TestCase):
 
         mock_redis.return_value.delete.assert_any_call("key1")
         mock_redis.return_value.delete.assert_any_call("key2")
+
+
+class GitHubSearchViewTestCase(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.search_url = "/api/search"
+        self.clear_cache_url = "/api/clear-cache"
+        self.valid_search_data = {
+            "type": "repo",  # Assuming SearchType.REPO is "REPO"
+            "keyword": "django",
+        }
+        self.invalid_search_data = {
+            "type": "INVALID",  # Invalid search type
+            "keyword": 12345,  # Invalid type for keyword
+        }
+
+    @patch("github.views.GitHubSearchService.search")
+    def test_search_github_success(self, mock_search_service):
+        """
+        Test search_github view with valid data.
+        """
+        mock_search_service.return_value = ["result1", "result2"]
+
+        response = self.client.post(
+            self.search_url,
+            data=self.valid_search_data,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(response.json()["results"], ["result1", "result2"])
+        self.assertEqual(response.json()["search_params"]["keyword"], "django")
+        mock_search_service.assert_called_once()
+
+    @patch("github.views.GitHubSearchService.search")
+    def test_search_github_invalid_data(self, mock_search_service):
+        """
+        Test search_github view with invalid Pydantic data.
+        """
+        response = self.client.post(
+            self.search_url,
+            data=self.invalid_search_data,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertDictEqual(
+            response.json(),
+            {
+                "type": "Input should be 'user', 'repo' or 'issue'",
+                "keyword": "Input should be a valid string",
+            },
+        )
+        mock_search_service.assert_not_called()
+
+    @patch("github.views.GitHubSearchService.search")
+    def test_search_github_service_raises_max_retry_exception(
+        self,
+        mock_search_service,
+    ):
+        """
+        Test search_github view handles MaxRetryExceedException.
+        """
+        from utils.exceptions import MaxRetryExceedException
+
+        mock_search_service.side_effect = MaxRetryExceedException()
+
+        response = self.client.post(
+            self.search_url,
+            data=self.valid_search_data,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, HTTP_429_TOO_MANY_REQUESTS)
+        self.assertIn("error", response.json())
+        self.assertEqual(response.json()["error"], "Try again after a while")
+        mock_search_service.assert_called_once()
+
+    @patch("github.views.GitHubSearchService.clear_cache")
+    def test_clear_cache_success(self, mock_clear_cache_service):
+        """
+        Test clear_cache view works as expected.
+        """
+        response = self.client.get(self.clear_cache_url)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(response.json()["success"], True)
+        mock_clear_cache_service.assert_called_once()

@@ -32,7 +32,9 @@ def max_retry_exceed_exception_handler(status=429):
                 return func(*args, **kwargs)
             except MaxRetryExceedException:
                 return Response(
-                    {},
+                    {
+                        "error": "Try again after a while",
+                    },
                     status=status,
                 )
 
