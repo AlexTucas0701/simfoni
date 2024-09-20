@@ -12,18 +12,14 @@ const GitHubRepositoryItem: React.FC<GitHubRepository> = (repository) => {
           rel="noreferrer"
         >
           <h2>{repository.name}</h2>
-          {
-            repository.description
-              && <p
-                style={{
-                  textAlign: "left"
-                }}
-              >
-                {repository.description}
-              </p>
-          }
         </a>
       </div>
+      {/* {
+        repository.description
+          && <p>
+            {repository.description}
+          </p>
+      } */}
       <div className="card-body">
         <h3>Owner</h3>
         <div
@@ -48,7 +44,12 @@ const GitHubRepositoryItem: React.FC<GitHubRepository> = (repository) => {
             </a>
           </div>
         </div>
-        {repository.stargazers_count}
+        <div className="card-footer">
+          <span>⭐ {repository.stargazers_count}</span>
+          <span>👁️ {repository.watchers_count}</span>
+          <span>🍴 {repository.forks_count}</span>
+          <span>❗ {repository.open_issues_count}</span>
+        </div>
       </div>
     </div>
   );

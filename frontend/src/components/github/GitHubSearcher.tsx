@@ -88,7 +88,6 @@ const GitHubSearcher: React.FC = () => {
         <select className="search-select" value={searchType} onChange={handleSearchTypeChange}>
           <option value={SearchType.USER}>Users</option>
           <option value={SearchType.REPO}>Repositories</option>
-          <option value={SearchType.ISSUE}>Issues</option>
         </select>
       </div>
     </div>

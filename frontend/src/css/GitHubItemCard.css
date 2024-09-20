@@ -23,6 +23,12 @@
   width: 100%;
 }
 
+.card-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .card img.avatar {
   width: 80px;
   height: 80px;
@@ -35,7 +41,6 @@
   margin: 10px 0;
   text-overflow: ellipsis;
   max-width: 170px;
-  white-space: nowrap; /* Prevent text from wrapping */
   overflow: hidden;    /* Hide the overflowing text */
   text-overflow: ellipsis; /* Add ellipsis (...) at the end of the text */
 }
@@ -45,7 +50,6 @@
   margin: 10px 0;
   text-overflow: ellipsis;
   max-width: 170px;
-  white-space: nowrap; /* Prevent text from wrapping */
   overflow: hidden;    /* Hide the overflowing text */
   text-overflow: ellipsis; /* Add ellipsis (...) at the end of the text */
 }
