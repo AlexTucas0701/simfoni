@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { clearGitHubSearchRemoteCache } from '../../redux/slices/cacheSlice';
+import { clearCache, clearGitHubSearchRemoteCache } from '../../redux/slices/cacheSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import '../../css/GitHubSearchCacheControl.css';
@@ -14,10 +14,14 @@ const GitHubSearchCacheControl: React.FC = () => {
     dispatch(clearGitHubSearchRemoteCache());
   };
 
+  const onClickCleanLocal = () => {
+    dispatch(clearCache());
+  };
+
   return (
     <div className="github-search-cache-control-container">
       <span>Clear the cache:</span>
-      <button>Local</button>
+      <button onClick={onClickCleanLocal}>Local</button>
       <button
         onClick={onClickCleanRemote}
         disabled={clear_cache_state.cleaning}

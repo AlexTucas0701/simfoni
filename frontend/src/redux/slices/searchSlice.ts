@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-// import type { RootState } from '../../store';
+import { RootState } from '../store';
+import { storeCache } from './cacheSlice';
 import {
   GitHubSearchParams,
   GitHubSearchState,
@@ -21,7 +22,19 @@ const initialState: GitHubSearchState = {
 
 export const fetchGitHubResults = createAsyncThunk(
   'githubSearch/fetchResults',
-  async ({ type, keyword }: GitHubSearchParams) => {
+  async ({ type, keyword }: GitHubSearchParams, { dispatch, getState }) => {
+    // Check cache
+    const local_cache = (getState() as RootState).cacheControl.cached;
+    if (local_cache[type] && local_cache[type][keyword]) {
+      return {
+        results: local_cache[type][keyword],
+        search_params: {
+          type: type,
+          keyword: keyword,
+        }
+      };
+    }
+    // If we don't have cache, send the requests
     const response = await api.post(
       "/search",
       {
@@ -29,6 +42,7 @@ export const fetchGitHubResults = createAsyncThunk(
         keyword: keyword,
       },
     );
+    dispatch(storeCache(response.data));
     return response.data;
   },
 );

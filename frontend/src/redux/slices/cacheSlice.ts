@@ -1,16 +1,18 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import api from '../../utils/api';
+import { GitHubSearchParams } from '../../types/search';
 
 interface ClearCacheState {
   cleaning: boolean;
   error: string | null;
+  cached: any;
 }
 
 const initialState: ClearCacheState = {
   cleaning: false,
   error: null,
+  cached: {},
 };
 
 export const clearGitHubSearchRemoteCache = createAsyncThunk(
@@ -26,7 +28,16 @@ export const clearGitHubSearchRemoteCache = createAsyncThunk(
 export const clearGitHubSearchRemoteCacheSlice = createSlice({
   name: 'cache',
   initialState,
-  reducers: {},
+  reducers: {
+    storeCache(state, action: PayloadAction<{search_params: GitHubSearchParams, results: any}>) {
+      const search_params = action.payload.search_params;
+      if (state.cached[search_params.type] === undefined) state.cached[search_params.type] = {};
+      state.cached[search_params.type][search_params.keyword] = action.payload.results;
+    },
+    clearCache(state) {
+      state.cached = {};
+    },
+  },
   extraReducers: (builder) => {
     builder
     .addCase(clearGitHubSearchRemoteCache.pending, (state) => {
@@ -44,6 +55,6 @@ export const clearGitHubSearchRemoteCacheSlice = createSlice({
   }
 })
 
-export const {} = clearGitHubSearchRemoteCacheSlice.actions;
+export const { storeCache, clearCache } = clearGitHubSearchRemoteCacheSlice.actions;
 
 export default clearGitHubSearchRemoteCacheSlice.reducer;
