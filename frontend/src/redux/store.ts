@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import githubReducer from './slices/githubSlice';
+import githubSearchReducer from './slices/searchSlice';
+import cacheControlReducer from './slices/cacheSlice';
 
 
 export const store = configureStore({
   reducer: {
-    githubSearch: githubReducer,
+    githubSearch: githubSearchReducer,
+    cacheControl: cacheControlReducer,
   },
   devTools: true,
 });

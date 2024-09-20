@@ -4,9 +4,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GitHubSearchParams, SearchType, getSearchType } from '../../types/search';
 import { useAppDispatch } from '../../hooks/index';
 import {
+  clearResults as clearResultsRedux,
   fetchGitHubResults,
   setSearchParams as setSearchParamsRedux,
-} from '../../redux/slices/githubSlice';
+} from '../../redux/slices/searchSlice';
 
 import '../../css/GitHubSearcher.css';
 
@@ -38,6 +39,11 @@ const GitHubSearcher: React.FC = () => {
     navigate(`/?${query_string}`, { replace: true });
 
     const debounce_timeout_id = setTimeout(() => {
+      if (keyword.length < 3) {
+        dispatch(clearResultsRedux());
+        return;
+      }
+
       const payload: GitHubSearchParams = {
         type,
         keyword,

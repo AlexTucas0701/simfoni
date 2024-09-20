@@ -1,0 +1,38 @@
+.github-search-cache-control-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; /* Center the span and buttons vertically */
+  gap: 15px; /* Add a gap between the text and the buttons */
+}
+
+.github-search-cache-control-container span {
+  font-size: 18px; /* Slightly larger font size for the text */
+  color: #333; /* Make the text color consistent with buttons */
+}
+
+.github-search-cache-control-container button {
+  width: 105px;
+  background-color: white; /* White background */
+  color: #333; /* Dark grey text */
+  padding: 10px 20px; /* Padding around the text */
+  font-size: 16px; /* Standard font size */
+  border: 2px solid #87CEEB; /* Soft blue border */
+  border-radius: 5px; /* Slightly rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.github-search-cache-control-container button:hover {
+  background-color: #f0f8ff; /* Light blue background on hover */
+  border-color: #4682B4; /* Slightly darker blue border on hover */
+}
+
+.github-search-cache-control-container button:focus {
+  outline: none; /* Remove default outline on focus */
+}
+
+.github-search-cache-control-container button:active {
+  background-color: #e6f7ff; /* Even lighter blue background when clicked */
+  border-color: #5F9EA0; /* Darker blue border when clicked */
+}

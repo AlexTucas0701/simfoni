@@ -9,6 +9,7 @@ import requests
 from requests.exceptions import HTTPError
 
 from config import Config
+from utils.exceptions import MaxRetryExceedException
 from utils import AbstractGlobalInstance
 
 from .constants import (
@@ -19,7 +20,7 @@ from .constants import (
 from .schemas import GitHubSearchParams, GitHubSearchResponse, SearchType
 
 
-def github_search_backoff(max_retry: int = 10, max_penalty=100):
+def github_search_backoff(max_retry: int = 10, max_penalty=50):
     def real_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -33,7 +34,7 @@ def github_search_backoff(max_retry: int = 10, max_penalty=100):
                     time.sleep(penalty)
                     penalty *= 2
                     penalty = min(penalty, max_penalty)
-            raise Exception("API rate limit exceeded")
+            raise MaxRetryExceedException()
 
         return wrapper
 
@@ -69,6 +70,9 @@ class GitHubSearchService(AbstractGlobalInstance):
         self.__cache.store_cache(cache_key, search_result)
 
         return search_result
+
+    def clear_cache(self):
+        self.__cache.clear_all_cache()
 
     def __search_engine(
         self,
@@ -128,7 +132,7 @@ class GitHubSearchService(AbstractGlobalInstance):
         return f"{cls.BASE_API}{api_path}"
 
 
-class GitHubSearchCacheService(AbstractGlobalInstance):
+class GitHubSearchCacheService:
     def __init__(self, cache_prefix=GITHUB_SEARCH_REDIS_CACHE_PREFIX):
         self.__redis_client = redis.Redis.from_url(Config.REDIS_CONNECTION_URL)
         self.__cache_prefix = cache_prefix
@@ -149,3 +153,15 @@ class GitHubSearchCacheService(AbstractGlobalInstance):
         if cache is None:
             return None
         return json.loads(cache.decode())
+
+    def clear_all_cache(self, prefix=None):
+        if prefix is None:
+            prefix = self.__cache_prefix
+        else:
+            prefix = f"{self.__cache_prefix}|{prefix}"
+
+        for key in self.__redis_client.scan_iter(f"{prefix}*"):
+            self.clear_cache(key)
+
+    def clear_cache(self, key):
+        self.__redis_client.delete(key)

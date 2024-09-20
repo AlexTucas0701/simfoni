@@ -33,13 +33,16 @@ export const fetchGitHubResults = createAsyncThunk(
   },
 );
 
-export const githubSlice = createSlice({
+export const githubSearchSlice = createSlice({
   name: 'gihtub',
   initialState,
   reducers: {
     setSearchParams(state, action: PayloadAction<GitHubSearchParams>) {
       state.keyword = action.payload.keyword;
       state.type = action.payload.type;
+    },
+    clearResults(state) {
+      state.results = {}
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +62,6 @@ export const githubSlice = createSlice({
   },
 });
 
-export const { setSearchParams } = githubSlice.actions;
+export const { setSearchParams, clearResults } = githubSearchSlice.actions;
 
-export default githubSlice.reducer;
+export default githubSearchSlice.reducer;
