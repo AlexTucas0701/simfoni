@@ -2,27 +2,22 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 // import type { RootState } from '../../store';
-import { SearchType } from '../../types/search';
+import {
+  GitHubSearchParams,
+  GitHubSearchState,
+  SearchType,
+} from '../../types/search';
 import api from '../../utils/api';
 
-export interface GitHubSearchParams {
-  type: SearchType;
-  keyword: string;
-}
-
-interface GitHubSearchState extends GitHubSearchParams {
-  results: any[];
-  loading: boolean;
-  error: string | null;
-}
 
 const initialState: GitHubSearchState = {
   type: SearchType.USER,
   keyword: '',
-  results: [],
+  results: {},
   loading: false,
   error: null,
 };
+
 
 export const fetchGitHubResults = createAsyncThunk(
   'githubSearch/fetchResults',

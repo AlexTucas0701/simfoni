@@ -3,11 +3,14 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from utils import pydantic_exception_handler
+
 from .schemas import GitHubSearchParams
 from .service import GitHubSearchService
 
 
 @api_view(["POST"])
+@pydantic_exception_handler()
 def search_github(request: Request):
     search_params = GitHubSearchParams(**request.data)
     search_result = GitHubSearchService().search(search_params)
@@ -22,6 +25,7 @@ def search_github(request: Request):
 
 
 @api_view(["GET"])
+@pydantic_exception_handler()
 def clear_cache(request: Request):
     return Response(
         data={"success": True},

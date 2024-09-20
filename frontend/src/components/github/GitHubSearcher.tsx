@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { SearchType, getSearchType } from '../../types/search';
+import { GitHubSearchParams, SearchType, getSearchType } from '../../types/search';
 import { useAppDispatch } from '../../hooks/index';
 import {
-  GitHubSearchParams,
   fetchGitHubResults,
   setSearchParams as setSearchParamsRedux,
 } from '../../redux/slices/githubSlice';

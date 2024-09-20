@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import List, Optional, Union
-from pydantic import BaseModel, HttpUrl, model_validator
+from pydantic import BaseModel, Field, HttpUrl, model_validator
 from datetime import datetime
 
 
@@ -12,7 +12,7 @@ class SearchType(Enum):
 
 class GitHubSearchParams(BaseModel):
     type: SearchType
-    keyword: str
+    keyword: str = Field(min_length=3)
 
     def model_dump(self, *args, **kwargs):
         org_data = super().model_dump(**kwargs)
