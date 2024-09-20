@@ -136,7 +136,7 @@ class Repository(BaseModel):
 class GitHubSearchResponse(BaseModel):
     total_count: int
     incomplete_results: bool
-    items: List[Union[User, Repository]]
+    items: Union[List[User], List[Repository]]
 
     @model_validator(mode="before")
     def parse_items(cls, input_data):
@@ -144,8 +144,14 @@ class GitHubSearchResponse(BaseModel):
         parsed_items = []
         for item in items:
             if "full_name" in item:  # Repository items have "full_name"
-                parsed_items.append(Repository(**item))
+                if isinstance(item, Repository):
+                    parsed_items.append(item)
+                elif type(item) is dict:
+                    parsed_items.append(Repository(**item))
             else:
-                parsed_items.append(User(**item))
+                if isinstance(item, User):
+                    parsed_items.append(item)
+                elif type(item) is dict:
+                    parsed_items.append(User(**item))
         input_data["items"] = parsed_items
         return input_data
