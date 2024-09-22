@@ -215,8 +215,6 @@ class GitHubSearchViewTestCase(APITestCase):
         """
         Test search_github view handles MaxRetryExceedException.
         """
-        from utils.exceptions import MaxRetryExceedException
-
         mock_search_service.side_effect = MaxRetryExceedException()
 
         response = self.client.post(

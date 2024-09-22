@@ -65,7 +65,7 @@ const SearchResult: React.FC = () => {
       loading
         ? <Searching type={searchType} keyword={searchKeyword} />
         : error
-          ? <GitHubSearchError />
+          ? <GitHubSearchError error={error} />
           : results.results
             ? <SearchResultPanel {...results} />
             : <></>

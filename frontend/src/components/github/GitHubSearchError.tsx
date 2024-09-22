@@ -1,9 +1,13 @@
 import React from 'react';
 
+interface GitHubSearchError {
+  error: string;
+}
 
-const GitHubSearchError: React.FC = () => {
+
+const GitHubSearchError: React.FC<GitHubSearchError> = ({error}) => {
   return (
-    <>Error Page</>
+    <>{error}</>
   );
 };
 
