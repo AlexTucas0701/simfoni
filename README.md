@@ -49,3 +49,23 @@ This is a full stack web application which aims to show the github resources (Us
 3. Frontend:
     - **Querying search parameters**: Use the query parameters to specify the search criteria in the frontend router. For example, we have `http://localhost:3000/?keyword=tht&type=user`, where the `keyword` parameter represents the search term (e.g., "tht"), and the `type` parameter defines the search category (e.g., "user"). These query parameters are extracted and passed to the backend service to execute the appropriate GitHub search based on the specified criteria.
     - **Persist storage of the cache using the local storage**: We use `redux-persist` to enable persistence of the cache in local storage. This ensures that cached data, such as GitHub search results, remains available across browser sessions, even after a page refresh or closing the browser. The `persistReducer` is applied to the cacheControlReducer, allowing the specific slice of state responsible for caching (`cached`) to be saved and rehydrated from local storage.
+
+## Future Plans for improvement of this application.
+First, when using the GitHub Search API, we encounter certain limits. Specifically, we can only retrieve the first 1000 items. Displaying all 1000 items at once on the frontend is not the best practice in terms of performance and user experience (UX).
+
+To improve this, it's recommended to implement pagination. When the user scrolls to the bottom of the page, we can send a request to the backend to fetch the next set of data.
+
+For this, we need a caching mechanism that stores search results based on the search parameters and the page number. This will also help optimize the API rate limit usage on the backend.
+
+Currently, GitHub provides response headers that show the rate limit status and pagination information. However, for pagination, the page details are provided via the URL.
+- Example 1:
+    ```
+    <https://api.github.com/search/users?q=alexandru&page=1>; rel="prev", <https://api.github.com/search/users?q=alexandru&page=3>; rel="next", <https://api.github.com/search/users?q=alexandru&page=34>; rel="last", <https://api.github.com/search/users?q=alexandru&page=1>; rel="first"
+    ```
+- Example 2:
+    ```
+    <https://api.github.com/search/users?page=1&q=alexandru>; rel="prev", <https://api.github.com/search/users?page=3&q=alexandru>; rel="next", <https://api.github.com/search/users?page=34&q=alexandru>; rel="last", <https://api.github.com/search/users?page=1&q=alexandru>; rel="first"
+    ```
+As you can see, there isn't consistency in the order of the query parameters. Therefore, we should parse the query parameters to use them as the cache key.
+
+By implementing this caching mechanism based on page numbers, we can enhance both performance and UX. However, caching solely based on the page number isn't flexible when dealing with varying page sizes, so we need to account for page size as well.
